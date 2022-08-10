@@ -13,6 +13,8 @@ export class FormComponent implements OnInit {
 
   public cliente: Cliente = new Cliente();
   public titulo: string = "Crear Cliente";
+  public errores: string = "";
+
 
   constructor(private clienteService: ClienteService,
               private router: Router,
@@ -42,6 +44,7 @@ export class FormComponent implements OnInit {
   }
 
   create(): void {
+    this.errores = "";
     console.log("cliente=", this.cliente);
     this.cliente.auditoria = {
       createdAt: "",
@@ -58,11 +61,14 @@ export class FormComponent implements OnInit {
         )
 
         this.router.navigate(['/clientes']);
+      }, (error) => {
+          this.errores = JSON.stringify(error.error);
       }
     )
   }
 
   update(): void {
+    this.errores = "";
     this.cliente.auditoria = {
       updatedAt: "",
       createdAt: ""
@@ -79,6 +85,8 @@ export class FormComponent implements OnInit {
         )
 
         this.router.navigate(['/clientes']);
+      }, (error) => {
+        this.errores = JSON.stringify(error.error);
       }
     )
   }
