@@ -5,6 +5,9 @@ import {catchError, map} from 'rxjs/operators';
 import {Observable, throwError} from "rxjs";
 import swal from "sweetalert2";
 import {Router} from "@angular/router";
+import {DatePipe, formatDate} from "@angular/common";
+import { LOCALE_ID, Inject } from '@angular/core';
+
 
 @Injectable({
   providedIn: 'root'
@@ -14,14 +17,30 @@ export class ClienteService {
   private httpHeaders: HttpHeaders = new HttpHeaders({'Content-Type': 'application/json'});
 
   constructor(private http: HttpClient,
-              private router: Router) {
+              private router: Router,
+              @Inject(LOCALE_ID) public locale: string
+              ) {
 
   }
 
   getClientes(): Observable<Cliente[]> {
     //return of(CLIENTES);
     return this.http.get(this.urlEndPoint).pipe(
-      map(response => response as Cliente[])
+     // map(response => response as Cliente[])
+      map(response => {
+        return (response as Cliente[]).map(cliente => {
+          cliente.nombre = cliente.nombre.toUpperCase();
+          // formatDate() // formate la fecha usando funcion propia de angular
+          // cliente.auditoria.createdAt = formatDate(cliente.auditoria.createdAt, 'dd/MM/yyyy', this.locale);
+
+          // Usando el pipe de angular para formatear la fecha
+          // DatePipe('formato a retornar la fecha').transform(fecha_a_cambiar, 'formato');
+          console.log("locale global", this.locale);
+          cliente.auditoria.createdAt = <string>new DatePipe(this.locale)
+            .transform(cliente.auditoria.createdAt, 'EEEE, dd/MM/yyyy');
+          return cliente;
+        });
+      })
     );
   }
 

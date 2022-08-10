@@ -1,15 +1,22 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import {LOCALE_ID, NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
 
-import { AppComponent } from './app.component';
+import {AppComponent} from './app.component';
 import {HeaderComponent} from "./header/header.component";
 import {FooterComponent} from "./footer/footer.component";
 import {DirectivaComponent} from "./directiva/directiva.component";
 import {ClientesComponent} from "./clientes/clientes.component";
 import {HttpClientModule} from "@angular/common/http";
 import {RouterModule, Routes} from "@angular/router";
-import { FormComponent } from './clientes/form.component';
+import {FormComponent} from './clientes/form.component';
 import {FormsModule} from "@angular/forms";
+
+/*
+* Configuracion global de internazionalizacion de la app para que retorne a español
+* */
+import localeEs from '@angular/common/locales/es';
+import {registerLocaleData} from "@angular/common";
+registerLocaleData(localeEs);
 
 const routes: Routes = [
   {path: '', redirectTo: '/clientes', pathMatch: 'full'},
@@ -35,7 +42,11 @@ const routes: Routes = [
     FormsModule,
     RouterModule.forRoot(routes),
   ],
-  providers: [],
+  providers: [
+    // Proveyendo a toda la app del locale español
+    {provide: LOCALE_ID, useValue: 'es'}
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
