@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {Pagination} from "../models/pagination";
 
 @Component({
@@ -6,7 +6,7 @@ import {Pagination} from "../models/pagination";
   templateUrl: './paginator.component.html',
   styleUrls: ['./paginator.component.css']
 })
-export class PaginatorComponent implements OnInit {
+export class PaginatorComponent implements OnInit, OnChanges {
 
   @Input() pagination: Pagination = {};
   paginas: number[] = [];
@@ -20,5 +20,13 @@ export class PaginatorComponent implements OnInit {
       .fill(0)
       .map((_valor, indice) => indice + 1);
   }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    let paginadorActualizado = changes['pagination'];
+    if (paginadorActualizado.previousValue) {
+      console.log("El paginador ha cambiado");
+    }
+  }
+
 
 }

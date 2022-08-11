@@ -7,7 +7,7 @@
     <a [routerLink]="['/clientes/page', 1]" class="page-link">Primera</a>
   </li>
   <li *ngFor="let numeroPagina of paginas" class="page-item">
-    <span *ngIf="numeroPagina == pagination.number" class="page-link">{{numeroPagina}}</span>
+    <span *ngIf="numeroPagina == pagination.number" class="page-link active">{{numeroPagina}}</span>
     <a [routerLink]="['/clientes/page', numeroPagina]"
        *ngIf="numeroPagina != pagination.number"
        class="page-link">{{numeroPagina}}</a>
