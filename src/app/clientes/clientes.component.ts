@@ -1,7 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {Cliente} from './cliente';
+import {Component, OnInit, Optional} from '@angular/core';
 import {ClienteService} from './cliente.service';
 import swal from 'sweetalert2';
+import {Cliente} from "../models/cliente";
+import {ActivatedRoute} from "@angular/router";
+import {Pagination} from "../models/pagination";
 
 
 @Component({
@@ -10,19 +12,34 @@ import swal from 'sweetalert2';
 })
 export class ClientesComponent implements OnInit {
 
-  clientes: Cliente[];
+  clientes: Cliente[] | undefined;
+  numberPage: number = 1;
+  pagination: Pagination = {};
 
-  constructor(private clienteService: ClienteService) {
+  constructor(private clienteService: ClienteService,
+              private activatedRoute: ActivatedRoute) {
     this.clientes = [];
   }
 
   ngOnInit() {
-    this.getClientes();
+
+    this.activatedRoute.paramMap
+      .subscribe((params) => {
+        this.numberPage = params.get('page') ? Number(params.get('page')) : 1;
+        this.getClientes(this.numberPage);
+      });
+
   }
 
-  public getClientes(): void {
-    this.clienteService.getClientes().subscribe(
+  public getClientes(page: number): void {
+    /*this.clienteService.getClientes().subscribe(
       clientes => this.clientes = clientes
+    );*/
+    this.clienteService.getClientePagination(page).subscribe(
+      pagination => {
+        this.clientes = pagination.content;
+        this.pagination = pagination;
+      }
     );
   }
 
@@ -45,7 +62,7 @@ export class ClientesComponent implements OnInit {
               `Cliente ${cliente.nombre} eliminado con éxito`,
               'success'
             )
-            this.getClientes();
+            this.getClientes(this.numberPage);
           }
         )
       }

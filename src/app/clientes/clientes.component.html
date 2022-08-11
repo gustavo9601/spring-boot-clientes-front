@@ -41,6 +41,10 @@
         </tbody>
       </table>
 
+      <app-paginator
+        *ngIf="!(pagination | objectEmpty)"
+        [pagination]="pagination"></app-paginator>
+
     </div>
   </div>
 

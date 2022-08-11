@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Cliente} from './cliente';
+
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {catchError, map} from 'rxjs/operators';
 import {Observable, throwError} from "rxjs";
@@ -7,6 +7,8 @@ import swal from "sweetalert2";
 import {Router} from "@angular/router";
 import {DatePipe, formatDate} from "@angular/common";
 import { LOCALE_ID, Inject } from '@angular/core';
+import {Cliente} from "../models/cliente";
+import {Pageable, Pagination} from "../models/pagination";
 
 
 @Injectable({
@@ -42,6 +44,10 @@ export class ClienteService {
         });
       })
     );
+  }
+
+  getClientePagination(page: number): Observable<Pagination> {
+    return this.http.get<Pagination>(this.urlEndPoint + '/page/' + page);
   }
 
   create(cliente: Cliente): Observable<Cliente> {

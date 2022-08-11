@@ -16,14 +16,19 @@ import {FormsModule} from "@angular/forms";
 * */
 import localeEs from '@angular/common/locales/es';
 import {registerLocaleData} from "@angular/common";
+import { PaginatorComponent } from './paginator/paginator.component';
+import { ObjectEmptyPipe } from './pipes/object-empty.pipe';
+
 registerLocaleData(localeEs);
 
 const routes: Routes = [
   {path: '', redirectTo: '/clientes', pathMatch: 'full'},
   {path: 'directivas', component: DirectivaComponent},
   {path: 'clientes', component: ClientesComponent},
+  {path: 'clientes/page/:page', component: ClientesComponent},
   {path: 'clientes/form', component: FormComponent},
   {path: 'clientes/form/:id', component: FormComponent},
+  {path: "**", redirectTo: '/clientes', pathMatch: 'full'}
 ];
 
 
@@ -34,7 +39,9 @@ const routes: Routes = [
     FooterComponent,
     DirectivaComponent,
     ClientesComponent,
-    FormComponent
+    FormComponent,
+    PaginatorComponent,
+    ObjectEmptyPipe
   ],
   imports: [
     BrowserModule,
