@@ -19,6 +19,12 @@ import {registerLocaleData} from "@angular/common";
 import { PaginatorComponent } from './paginator/paginator.component';
 import { ObjectEmptyPipe } from './pipes/object-empty.pipe';
 
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatInputModule} from '@angular/material/input';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatNativeDateModule} from "@angular/material/core";
+
+
 registerLocaleData(localeEs);
 
 const routes: Routes = [
@@ -30,6 +36,7 @@ const routes: Routes = [
   {path: 'clientes/form/:id', component: FormComponent},
   {path: "**", redirectTo: '/clientes', pathMatch: 'full'}
 ];
+
 
 
 @NgModule({
@@ -47,7 +54,11 @@ const routes: Routes = [
     BrowserModule,
     HttpClientModule,
     FormsModule,
+    MatDatepickerModule,
+    MatInputModule,
+    MatNativeDateModule,
     RouterModule.forRoot(routes),
+    BrowserAnimationsModule,
   ],
   providers: [
     // Proveyendo a toda la app del locale español
