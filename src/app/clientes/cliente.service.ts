@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
 
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpEvent, HttpHeaders, HttpRequest} from '@angular/common/http';
 import {catchError, map} from 'rxjs/operators';
 import {Observable, throwError} from "rxjs";
 import swal from "sweetalert2";
 import {Router} from "@angular/router";
 import {DatePipe, formatDate} from "@angular/common";
-import { LOCALE_ID, Inject } from '@angular/core';
+import {LOCALE_ID, Inject} from '@angular/core';
 import {Cliente} from "../models/cliente";
 import {Pageable, Pagination} from "../models/pagination";
 
@@ -21,14 +21,14 @@ export class ClienteService {
   constructor(private http: HttpClient,
               private router: Router,
               @Inject(LOCALE_ID) public locale: string
-              ) {
+  ) {
 
   }
 
   getClientes(): Observable<Cliente[]> {
     //return of(CLIENTES);
     return this.http.get(this.urlEndPoint).pipe(
-     // map(response => response as Cliente[])
+      // map(response => response as Cliente[])
       map(response => {
         return (response as Cliente[]).map(cliente => {
           cliente.nombre = cliente.nombre.toUpperCase();
@@ -53,17 +53,18 @@ export class ClienteService {
   create(cliente: Cliente): Observable<Cliente> {
     return this.http.post(this.urlEndPoint, cliente, {headers: this.httpHeaders}).pipe(
       map(response => response as Cliente)
-    ) .pipe(catchError((error) => {
+    ).pipe(catchError((error) => {
 
 
-      if(error.status==400){
+      if (error.status == 400) {
         return throwError(error); // lo retornamos para que el componente le de el manejo
       }
 
       console.log("Error al crear:", error);
       swal.fire('Error al crear', error.error.mensaje, 'error');
       return throwError(error);
-    }));;
+    }));
+    ;
   }
 
   getCliente(id: number): Observable<Cliente> {
@@ -84,7 +85,7 @@ export class ClienteService {
         console.log("Error al editar:", error);
 
 
-        if(error.status==400){
+        if (error.status == 400) {
           return throwError(error); // lo retornamos para que el componente le de el manejo
         }
 
@@ -102,5 +103,18 @@ export class ClienteService {
       }));
   }
 
+
+  subirFoto(archivo: File, id: string): Observable<HttpEvent<Cliente>> {
+    let formData = new FormData();
+    formData.append("archivo", archivo);
+    formData.append("id", id);
+    /*
+    * HttpRequest // Tiene soporte para verificar el progress de la subida de datos o archivos
+    * // reportProgress: true // habilita el progreso
+    * */
+
+    const request = new HttpRequest('POST', `${this.urlEndPoint}/upload`, formData, {reportProgress: true});
+    return this.http.request<Cliente>(request);
+  }
 
 }

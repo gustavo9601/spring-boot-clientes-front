@@ -14,16 +14,21 @@
         <thead>
         <tr>
           <th>id</th>
+          <th>Imagen</th>
           <th>nombre</th>
           <th>apellido</th>
           <th>email</th>
           <th>F Crecion</th>
           <th>F Actualizacion</th>
+          <th>Opciones</th>
         </tr>
         </thead>
         <tbody>
         <tr *ngFor="let cliente of clientes">
           <td>{{ cliente.id }}</td>
+          <td>
+            <img *ngIf="cliente?.foto != null" [src]="'http://localhost:8080/api/clientes/upload/' + cliente.foto" width="100" />
+          </td>
           <td>{{ cliente.nombre }}</td>
           <td>{{ cliente.apellido }}</td>
           <td>{{ cliente.email }}</td>
@@ -36,6 +41,10 @@
             <button class="btn btn-sm btn-danger"
               (click)="delete(cliente)"
             >ELiminar</button>
+            <button
+              class="btn btn-primary btn-sm"
+              [routerLink]="['/clientes/ver', cliente.id]"
+            >Ver</button>
           </td>
         </tr>
         </tbody>

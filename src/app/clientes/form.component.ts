@@ -1,8 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, LOCALE_ID, OnInit} from '@angular/core';
 import {ClienteService} from "./cliente.service";
 import {Router, ActivatedRoute} from "@angular/router";
 import swal from 'sweetalert2';
 import {Cliente} from "../models/cliente";
+import {formatDate} from "@angular/common";
 
 
 @Component({
@@ -18,7 +19,8 @@ export class FormComponent implements OnInit {
 
   constructor(private clienteService: ClienteService,
               private router: Router,
-              private activatedRoute: ActivatedRoute) {
+              private activatedRoute: ActivatedRoute,
+              @Inject(LOCALE_ID) public locale: string) {
 
 
   }
@@ -45,11 +47,12 @@ export class FormComponent implements OnInit {
 
   create(): void {
     this.errores = "";
-    console.log("cliente=", this.cliente);
     this.cliente.auditoria = {
       createdAt: "",
       updatedAt: ""
     }
+    this.cliente.fechaNacimiento = formatDate(this.cliente.fechaNacimiento, "yyyy/MM/dd", this.locale);
+    console.log("cliente=", this.cliente);
     this.clienteService.create(this.cliente).subscribe(
       (respuesta: Cliente) => {
         console.log("Cliente creado:", respuesta);
@@ -62,7 +65,7 @@ export class FormComponent implements OnInit {
 
         this.router.navigate(['/clientes']);
       }, (error) => {
-          this.errores = JSON.stringify(error.error);
+        this.errores = JSON.stringify(error.error);
       }
     )
   }
