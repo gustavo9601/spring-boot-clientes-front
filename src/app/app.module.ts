@@ -25,6 +25,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatNativeDateModule} from "@angular/material/core";
 import { DetalleComponent } from './clientes/detalle/detalle.component';
 
+import { MAT_DATE_LOCALE } from '@angular/material/core'
+
 
 registerLocaleData(localeEs);
 
@@ -65,7 +67,9 @@ const routes: Routes = [
   ],
   providers: [
     // Proveyendo a toda la app del locale español
-    {provide: LOCALE_ID, useValue: 'es'}
+    {provide: LOCALE_ID, useValue: 'es'},
+    // COnfiguracion de formato para date picker material
+    { provide: MAT_DATE_LOCALE, useValue: 'es-CO' }
   ],
   bootstrap: [AppComponent]
 })

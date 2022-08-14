@@ -5,6 +5,7 @@ import {ActivatedRoute} from "@angular/router";
 
 import swal from "sweetalert2";
 import {HttpClient, HttpEvent, HttpEventType, HttpRequest} from "@angular/common/http";
+import {Region} from "../../models/region";
 
 @Component({
   selector: 'app-detalle',
@@ -22,7 +23,6 @@ export class DetalleComponent implements OnInit {
 
   }
 
-
   ngOnInit(): void {
     this.getCliente();
   }
@@ -37,6 +37,7 @@ export class DetalleComponent implements OnInit {
       }
     );
   }
+
 
   changeInputFile($event: any): void {
     this.progreso = 0;

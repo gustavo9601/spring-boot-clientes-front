@@ -7,7 +7,8 @@
       <div class="my-2 left">
         <button
           [routerLink]="['/clientes/form']"
-          class="btn rounded-1 btn-primary">Crear cliente</button>
+          class="btn rounded-1 btn-primary">Crear cliente
+        </button>
       </div>
 
       <table class="table table-bordered table-striped">
@@ -16,7 +17,7 @@
           <th>id</th>
           <th>Imagen</th>
           <th>nombre</th>
-          <th>apellido</th>
+          <th>region</th>
           <th>email</th>
           <th>F Crecion</th>
           <th>F Actualizacion</th>
@@ -27,24 +28,28 @@
         <tr *ngFor="let cliente of clientes">
           <td>{{ cliente.id }}</td>
           <td>
-            <img *ngIf="cliente?.foto != null" [src]="'http://localhost:8080/api/clientes/upload/' + cliente.foto" width="100" />
+            <img *ngIf="cliente?.foto != null" [src]="'http://localhost:8080/api/clientes/upload/' + cliente.foto"
+                 width="100"/>
           </td>
-          <td>{{ cliente.nombre }}</td>
-          <td>{{ cliente.apellido }}</td>
+          <td>{{ cliente.nombre + " " + cliente.apellido  }}</td>
+          <td>{{cliente.region.nombre}}</td>
           <td>{{ cliente.email }}</td>
           <td>{{ cliente.auditoria?.createdAt }}</td>
           <td>{{ cliente.auditoria?.updatedAt }}</td>
           <td>
             <button class="btn btn-sm btn-info"
                     [routerLink]="['/clientes/form', cliente.id]"
-            >Editar</button>
+            >Editar
+            </button>
             <button class="btn btn-sm btn-danger"
-              (click)="delete(cliente)"
-            >ELiminar</button>
+                    (click)="delete(cliente)"
+            >ELiminar
+            </button>
             <button
               class="btn btn-primary btn-sm"
               [routerLink]="['/clientes/ver', cliente.id]"
-            >Ver</button>
+            >Ver
+            </button>
           </td>
         </tr>
         </tbody>

@@ -26,6 +26,7 @@
               <li class="list-group-item active">{{cliente.nombre}}</li>
               <li class="list-group-item">{{cliente.apellido}}</li>
               <li class="list-group-item">{{cliente.email}}</li>
+              <li class="list-group-item">{{cliente.region.nombre}}</li>
               <li class="list-group-item">Fecha Nacimiento: {{cliente.fechaNacimiento | date}}</li>
               <li class="list-group-item">Fecha Creacion: {{cliente.auditoria.createdAt | date:"fullDate"}}</li>
             </ul>

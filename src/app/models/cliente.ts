@@ -1,4 +1,5 @@
 import {Auditoria} from "./auditoria";
+import {Region} from "./region";
 
 export class Cliente {
   id!: number;
@@ -8,5 +9,5 @@ export class Cliente {
   fechaNacimiento!: string;
   foto: string;
   auditoria!: Auditoria;
-
+  region!: Region;
 }

@@ -4,6 +4,8 @@ import {Router, ActivatedRoute} from "@angular/router";
 import swal from 'sweetalert2';
 import {Cliente} from "../models/cliente";
 import {formatDate} from "@angular/common";
+import {RegionService} from "./region.service";
+import {Region} from "../models/region";
 
 
 @Component({
@@ -15,10 +17,12 @@ export class FormComponent implements OnInit {
   public cliente: Cliente = new Cliente();
   public titulo: string = "Crear Cliente";
   public errores: string = "";
+  regiones: Region[] = [];
 
 
   constructor(private clienteService: ClienteService,
               private router: Router,
+              private regionService: RegionService,
               private activatedRoute: ActivatedRoute,
               @Inject(LOCALE_ID) public locale: string) {
 
@@ -27,6 +31,7 @@ export class FormComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarCliente();
+    this.getRegiones();
   }
 
   cargarCliente() {
@@ -76,6 +81,7 @@ export class FormComponent implements OnInit {
       updatedAt: "",
       createdAt: ""
     }
+    this.cliente.fechaNacimiento = formatDate(this.cliente.fechaNacimiento, "yyyy/MM/dd", this.locale);
     console.log("cliente a actualizar=", this.cliente);
     this.clienteService.update(this.cliente).subscribe(
       (respuesta: Cliente) => {
@@ -92,5 +98,20 @@ export class FormComponent implements OnInit {
         this.errores = JSON.stringify(error.error);
       }
     )
+  }
+
+
+  getRegiones(): void {
+    this.regionService.getRegiones()
+      .subscribe(regiones => this.regiones = regiones);
+  }
+
+  // o1 // Objeto de la iteracion
+  // o2 // Objeto del cliente
+  compararRegion(o1: Region, o2: Region): boolean {
+    if (o1 === undefined && o2 === undefined) {
+      return true;
+    }
+    return o1 == null || o2 == null ? false : o1.id === o2.id;
   }
 }
