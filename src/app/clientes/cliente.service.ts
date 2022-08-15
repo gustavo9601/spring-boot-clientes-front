@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 
-import {HttpClient, HttpEvent, HttpHeaders, HttpRequest} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpEvent, HttpHeaders, HttpRequest} from '@angular/common/http';
 import {catchError, map} from 'rxjs/operators';
 import {Observable, throwError} from "rxjs";
 import swal from "sweetalert2";
@@ -9,6 +9,7 @@ import {DatePipe, formatDate} from "@angular/common";
 import {LOCALE_ID, Inject} from '@angular/core';
 import {Cliente} from "../models/cliente";
 import {Pageable, Pagination} from "../models/pagination";
+import {AuthService} from "../usuarios/auth.service";
 
 
 @Injectable({
@@ -16,14 +17,24 @@ import {Pageable, Pagination} from "../models/pagination";
 })
 export class ClienteService {
   private urlEndPoint: string = 'http://localhost:8080/api/clientes';
-  private httpHeaders: HttpHeaders = new HttpHeaders({'Content-Type': 'application/json'});
 
   constructor(private http: HttpClient,
               private router: Router,
-              @Inject(LOCALE_ID) public locale: string
+              @Inject(LOCALE_ID) public locale: string,
+              private authService: AuthService
   ) {
 
   }
+
+  /*
+  // Añadiendo los headers de forma manual
+  public agregarAuthorizationHeader() : HttpHeaders{
+    let token = this.authService.token;
+    if(token != null){
+      return this.httpHeaders.append('Authorization', 'Bearer ' + token);
+    }
+    return this.httpHeaders;
+  }*/
 
   getClientes(): Observable<Cliente[]> {
     //return of(CLIENTES);
@@ -51,56 +62,22 @@ export class ClienteService {
   }
 
   create(cliente: Cliente): Observable<Cliente> {
-    return this.http.post(this.urlEndPoint, cliente, {headers: this.httpHeaders}).pipe(
+    return this.http.post(this.urlEndPoint, cliente).pipe(
       map(response => response as Cliente)
-    ).pipe(catchError((error) => {
-
-
-      if (error.status == 400) {
-        return throwError(error); // lo retornamos para que el componente le de el manejo
-      }
-
-      console.log("Error al crear:", error);
-      swal.fire('Error al crear', error.error.mensaje, 'error');
-      return throwError(error);
-    }));
-    ;
+    );
   }
 
   getCliente(id: number): Observable<Cliente> {
-    return this.http.get<Cliente>(`${this.urlEndPoint}/${id}`)
-      .pipe(catchError((error) => {
-        console.log("Error al consultar:", error);
-        swal.fire('Error al consultar', error.error.mensaje, 'error');
-        this.router.navigate(['/clientes']);
-        return throwError(error);
-      }));
+    return this.http.get<Cliente>(`${this.urlEndPoint}/${id}`);
   }
 
   update(cliente: Cliente): Observable<Cliente> {
     return this.http.put<Cliente>(`${this.urlEndPoint}/${cliente.id}`,
-      cliente,
-      {headers: this.httpHeaders})
-      .pipe(catchError((error) => {
-        console.log("Error al editar:", error);
-
-
-        if (error.status == 400) {
-          return throwError(error); // lo retornamos para que el componente le de el manejo
-        }
-
-        swal.fire('Error al editar', error.error.mensaje, 'error');
-        return throwError(error);
-      }));
+      cliente);
   }
 
   delete(id: number): Observable<Cliente> {
-    return this.http.delete<Cliente>(`${this.urlEndPoint}/${id}`, {headers: this.httpHeaders})
-      .pipe(catchError((error) => {
-        console.log("Error al eliminar:", error);
-        swal.fire('Error al eliminar', error.error.mensaje, 'error');
-        return throwError(error);
-      }));
+    return this.http.delete<Cliente>(`${this.urlEndPoint}/${id}`);
   }
 
 
@@ -108,13 +85,45 @@ export class ClienteService {
     let formData = new FormData();
     formData.append("archivo", archivo);
     formData.append("id", id);
+
+    let httpHeaders = new HttpHeaders();
+    let token = this.authService.token;
+    if (token != null) {
+      httpHeaders = httpHeaders.append('Authorization', 'Bearer ' + token);
+    }
+
+
     /*
     * HttpRequest // Tiene soporte para verificar el progress de la subida de datos o archivos
     * // reportProgress: true // habilita el progreso
     * */
 
-    const request = new HttpRequest('POST', `${this.urlEndPoint}/upload`, formData, {reportProgress: true});
+    const request = new HttpRequest('POST',
+      `${this.urlEndPoint}/upload`,
+      formData, {reportProgress: true, headers: httpHeaders});
     return this.http.request<Cliente>(request);
   }
+
+  /*
+  // Manejo de errores de forma manual
+  public isNoAutorizado(error: HttpErrorResponse): boolean {
+    if (error.status == 401) {
+      this.router.navigate(['/login']);
+
+      // validando si estamos autenticados
+      if(this.authService.isAuthenticated()){
+        this.authService.logout();
+      }
+
+      return true;
+    }
+    if(error.status == 403){
+      swal.fire('Acceso denegado', 'No tienes acceso a este recurso', 'warning');
+      this.router.navigate(['/clientes']);
+      return true;
+    }
+
+    return false;
+  }*/
 
 }

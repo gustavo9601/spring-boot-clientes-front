@@ -6,6 +6,7 @@ import {ActivatedRoute} from "@angular/router";
 import swal from "sweetalert2";
 import {HttpClient, HttpEvent, HttpEventType, HttpRequest} from "@angular/common/http";
 import {Region} from "../../models/region";
+import {AuthService} from "../../usuarios/auth.service";
 
 @Component({
   selector: 'app-detalle',
@@ -19,6 +20,7 @@ export class DetalleComponent implements OnInit {
   public progreso: number = 0;
 
   constructor(private clienteService: ClienteService,
+              public authService: AuthService,
               private activatedRoute: ActivatedRoute) {
 
   }

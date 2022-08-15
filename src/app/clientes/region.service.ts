@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
 
-import {HttpClient} from '@angular/common/http';
-import {map} from 'rxjs/operators';
-import {Observable} from "rxjs";
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {catchError, map} from 'rxjs/operators';
+import {Observable, throwError} from "rxjs";
 import {Region} from "../models/region";
+import {ClienteService} from "./cliente.service";
 
 
 @Injectable({
@@ -12,7 +13,8 @@ import {Region} from "../models/region";
 export class RegionService {
   private urlEndPoint: string = 'http://localhost:8080/api/clientes/regiones';
 
-  constructor(private http: HttpClient
+  constructor(private http: HttpClient,
+              private clienteService: ClienteService
   ) {
 
   }
@@ -22,11 +24,11 @@ export class RegionService {
     return this.http.get(this.urlEndPoint).pipe(
       // map(response => response as Cliente[])
       map(response => {
-        return (response as Region[]).map(region => {
-          return region;
-        });
-      })
-    );
+          return (response as Region[]).map(region => {
+            return region;
+          });
+        }
+      ));
   }
 
 }

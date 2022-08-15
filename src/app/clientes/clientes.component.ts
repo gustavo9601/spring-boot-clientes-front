@@ -4,6 +4,7 @@ import swal from 'sweetalert2';
 import {Cliente} from "../models/cliente";
 import {ActivatedRoute} from "@angular/router";
 import {Pagination} from "../models/pagination";
+import {AuthService} from "../usuarios/auth.service";
 
 
 @Component({
@@ -17,6 +18,7 @@ export class ClientesComponent implements OnInit {
   pagination: Pagination = {};
 
   constructor(private clienteService: ClienteService,
+              public authService: AuthService,
               private activatedRoute: ActivatedRoute) {
     this.clientes = [];
   }

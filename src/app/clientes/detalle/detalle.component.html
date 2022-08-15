@@ -11,6 +11,7 @@
                  *ngIf="cliente.foto != null">
             <label for="archivo">Subir archivo</label>
             <input type="file"
+                   *ngIf="authService.hasRole('ROLE_ADMIN')"
                    name="archivo"
                    id="archivo"
                    (change)="changeInputFile($event)"
