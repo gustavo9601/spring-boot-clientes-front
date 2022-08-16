@@ -10,13 +10,14 @@ import {LOCALE_ID, Inject} from '@angular/core';
 import {Cliente} from "../models/cliente";
 import {Pageable, Pagination} from "../models/pagination";
 import {AuthService} from "../usuarios/auth.service";
+import {environment} from "../../environments/environment";
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class ClienteService {
-  private urlEndPoint: string = 'http://localhost:8080/api/clientes';
+  private urlEndPoint: string = environment.api + 'api/clientes';
 
   constructor(private http: HttpClient,
               private router: Router,

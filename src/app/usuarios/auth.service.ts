@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from "rxjs";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Usuario} from "../models/usuario";
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class AuthService {
   }
 
   login(usuario: Usuario): Observable<any> {
-    const urlEndPoint: string = 'http://localhost:8080/api/oauth/token';
+    const urlEndPoint: string = environment.api + 'oauth/token';
 
     const credenciales = btoa('angular' + ':' + '12345'); // encode en base 64
     const httpHeaders = new HttpHeaders({
@@ -47,12 +48,13 @@ export class AuthService {
 
   guardarUsuario(accessToken: string): void {
     let payload = this.obtenerDatosToken(accessToken).usuario_por_bd;
+    console.log("payload =>\t", payload);
     this._usuario = new Usuario();
     this._usuario.nombre = payload.nombre;
     this._usuario.apellido = payload.apellido;
     this._usuario.email = payload.email;
-    this._usuario.username = payload.user_name;
-    this._usuario.roles = payload.authorities;
+    this._usuario.username = payload.username;
+    this._usuario.roles = payload.roles;
     sessionStorage.setItem('usuario', JSON.stringify(this._usuario));
   }
 
@@ -98,7 +100,7 @@ export class AuthService {
   }
 
   public hasRole(role: string): boolean {
-    if (this.usuario.roles.includes(role)) {
+    if (this.usuario.roles.some(item => item.nombre === role)) {
       return true;
     }
     return false;

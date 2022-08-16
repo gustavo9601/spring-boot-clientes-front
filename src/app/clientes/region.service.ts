@@ -5,13 +5,14 @@ import {catchError, map} from 'rxjs/operators';
 import {Observable, throwError} from "rxjs";
 import {Region} from "../models/region";
 import {ClienteService} from "./cliente.service";
+import {environment} from "../../environments/environment";
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class RegionService {
-  private urlEndPoint: string = 'http://localhost:8080/api/clientes/regiones';
+  private urlEndPoint: string = environment.api + 'api/clientes/regiones';
 
   constructor(private http: HttpClient,
               private clienteService: ClienteService
@@ -24,6 +25,7 @@ export class RegionService {
     return this.http.get(this.urlEndPoint).pipe(
       // map(response => response as Cliente[])
       map(response => {
+          console.log("response =>", response);
           return (response as Region[]).map(region => {
             return region;
           });

@@ -103,7 +103,11 @@ export class FormComponent implements OnInit {
 
   getRegiones(): void {
     this.regionService.getRegiones()
-      .subscribe(regiones => this.regiones = regiones);
+      .subscribe(regiones => {
+        this.regiones = regiones
+      }, (error) => {
+        console.log("error en getRegiones", error);
+      });
   }
 
   // o1 // Objeto de la iteracion
