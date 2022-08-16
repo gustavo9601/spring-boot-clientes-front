@@ -19,8 +19,8 @@ export class AuthService {
 
     const credenciales = btoa('angular' + ':' + '12345'); // encode en base 64
     const httpHeaders = new HttpHeaders({
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': 'Basic ' + credenciales
+      'Authorization': 'Basic ' + credenciales,
+      'Content-Type': 'application/x-www-form-urlencoded'
     });
 
     console.log("user", usuario);
