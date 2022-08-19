@@ -7,6 +7,7 @@ import swal from "sweetalert2";
 import {HttpClient, HttpEvent, HttpEventType, HttpRequest} from "@angular/common/http";
 import {Region} from "../../models/region";
 import {AuthService} from "../../usuarios/auth.service";
+import {Factura} from "../../models/factura";
 
 @Component({
   selector: 'app-detalle',
@@ -68,5 +69,9 @@ export class DetalleComponent implements OnInit {
       });
   }
 
+
+  delete(factura: Factura):void{
+
+  }
 
 }

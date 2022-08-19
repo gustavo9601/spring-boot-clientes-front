@@ -31,11 +31,13 @@ import {AuthGuard} from "./usuarios/guards/auth.guard";
 import {RoleGuard} from "./usuarios/guards/role.guard";
 import {TokenInterceptor} from "./usuarios/interceptors/token.interceptor";
 import {AuthResponsesInterceptor} from "./usuarios/interceptors/auth-responses.interceptor";
+import { DetalleFacturaComponent } from './facturas/detalle-factura.component';
 
 
 registerLocaleData(localeEs);
 
-const routes: Routes = [
+let routes: Routes;
+routes = [
   {path: '', redirectTo: '/clientes', pathMatch: 'full'},
   {path: 'directivas', component: DirectivaComponent},
   {path: 'clientes', component: ClientesComponent},
@@ -52,6 +54,7 @@ const routes: Routes = [
   },
   {path: 'clientes/ver/:id', component: DetalleComponent},
   {path: 'login', component: LoginComponent},
+  {path: 'facturas/:id', component: DetalleFacturaComponent},
   {path: "**", redirectTo: '/clientes', pathMatch: 'full'}
 ];
 
@@ -67,7 +70,8 @@ const routes: Routes = [
     PaginatorComponent,
     ObjectEmptyPipe,
     DetalleComponent,
-    LoginComponent
+    LoginComponent,
+    DetalleFacturaComponent
   ],
   imports: [
     BrowserModule,

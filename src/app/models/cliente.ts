@@ -1,5 +1,6 @@
 import {Auditoria} from "./auditoria";
 import {Region} from "./region";
+import {Factura} from "./factura";
 
 export class Cliente {
   id!: number;
@@ -10,4 +11,5 @@ export class Cliente {
   foto: string;
   auditoria!: Auditoria;
   region!: Region;
+  facturas: Factura[];
 }

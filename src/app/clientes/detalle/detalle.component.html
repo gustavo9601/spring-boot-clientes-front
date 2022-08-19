@@ -17,8 +17,9 @@
                    (change)="changeInputFile($event)"
                    class="form-control">
             <div class="progress" *ngIf="progreso>0">
-              <div class="progress-bar" role="progressbar" aria-label="Example with label" [ngStyle]="{width: progreso + '%'}"
-                    aria-valuemin="0" [attr.aria-valuemax]="progreso">{{progreso}}%
+              <div class="progress-bar" role="progressbar" aria-label="Example with label"
+                   [ngStyle]="{width: progreso + '%'}"
+                   aria-valuemin="0" [attr.aria-valuemax]="progreso">{{progreso}}%
               </div>
             </div>
           </div>
@@ -31,6 +32,46 @@
               <li class="list-group-item">Fecha Nacimiento: {{cliente.fechaNacimiento | date}}</li>
               <li class="list-group-item">Fecha Creacion: {{cliente.auditoria.createdAt | date:"fullDate"}}</li>
             </ul>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="row">
+
+              <div class="alert alert-info my-4" *ngIf="cliente.facturas.length == 0">
+                No hay facturas asignadas para el cliente {{cliente.nombre}} {{cliente.apellido}}
+              </div>
+
+              <table class="table table-bordered table-striped my-4 table-dark"
+                     *ngIf="cliente.facturas.length > 0">
+                <thead>
+                <tr>
+                  <th>folio</th>
+                  <th>descripción</th>
+                  <th>fecha</th>
+                  <th>total</th>
+                  <th>detalle</th>
+                  <th *ngIf="authService.hasRole('ROLE_ADMIN')">eliminar</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let factura of cliente.facturas">
+                  <td>{{factura.id}}</td>
+                  <td>{{factura.descripcion}}</td>
+                  <td>{{factura.auditoria.createdAt}}</td>
+                  <td>{{factura.total | number}}</td>
+                  <td>
+                    <button class="btn btn-primary btn-sm" type="button"
+                            [routerLink]="['/facturas', factura.id]">ver
+                    </button>
+                  </td>
+                  <td *ngIf="authService.hasRole('ROLE_ADMIN')">
+                    <button class="btn btn-danger btn-sm" type="button" (click)="delete(factura)">eliminar</button>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
