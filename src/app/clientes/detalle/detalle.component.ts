@@ -8,6 +8,7 @@ import {HttpClient, HttpEvent, HttpEventType, HttpRequest} from "@angular/common
 import {Region} from "../../models/region";
 import {AuthService} from "../../usuarios/auth.service";
 import {Factura} from "../../models/factura";
+import {FacturaService} from "../../facturas/services/factura.service";
 
 @Component({
   selector: 'app-detalle',
@@ -22,6 +23,7 @@ export class DetalleComponent implements OnInit {
 
   constructor(private clienteService: ClienteService,
               public authService: AuthService,
+              private facturaService: FacturaService,
               private activatedRoute: ActivatedRoute) {
 
   }
@@ -70,8 +72,12 @@ export class DetalleComponent implements OnInit {
   }
 
 
-  delete(factura: Factura):void{
-
+  delete(factura: Factura): void {
+    this.facturaService.delete(factura.id).subscribe(
+      response => {
+        swal.fire('Factura eliminada', `La factura con id: [${factura.id}] ha sido eliminada correctamente`, 'success');
+        this.getCliente();
+      }
+    );
   }
-
 }

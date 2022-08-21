@@ -53,6 +53,13 @@
               [routerLink]="['/clientes/ver', cliente.id]"
             >Ver
             </button>
+
+            <button
+              class="btn btn-warning btn-sm"
+              *ngIf="authService.hasRole('ROLE_ADMIN')"
+              [routerLink]="['/facturas/form', cliente.id]"
+            >Crear Factura
+            </button>
           </td>
         </tr>
         </tbody>

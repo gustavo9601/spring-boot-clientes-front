@@ -9,7 +9,7 @@ import {ClientesComponent} from "./clientes/clientes.component";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {RouterModule, Routes} from "@angular/router";
 import {FormComponent} from './clientes/form.component';
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 /*
 * Configuracion global de internazionalizacion de la app para que retorne a español
@@ -23,6 +23,8 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatInputModule} from '@angular/material/input';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatNativeDateModule} from "@angular/material/core";
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+
 import {DetalleComponent} from './clientes/detalle/detalle.component';
 
 import {MAT_DATE_LOCALE} from '@angular/material/core';
@@ -32,6 +34,7 @@ import {RoleGuard} from "./usuarios/guards/role.guard";
 import {TokenInterceptor} from "./usuarios/interceptors/token.interceptor";
 import {AuthResponsesInterceptor} from "./usuarios/interceptors/auth-responses.interceptor";
 import { DetalleFacturaComponent } from './facturas/detalle-factura.component';
+import { FacturasComponent } from './facturas/facturas.component';
 
 
 registerLocaleData(localeEs);
@@ -54,7 +57,16 @@ routes = [
   },
   {path: 'clientes/ver/:id', component: DetalleComponent},
   {path: 'login', component: LoginComponent},
-  {path: 'facturas/:id', component: DetalleFacturaComponent},
+  {path: 'facturas/:id',
+    component: DetalleFacturaComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: {role: 'ROLE_USER'}
+  },
+  {path: 'facturas/form/:clienteId',
+    component: FacturasComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: {role: 'ROLE_ADMIN'}
+  },
   {path: "**", redirectTo: '/clientes', pathMatch: 'full'}
 ];
 
@@ -71,13 +83,16 @@ routes = [
     ObjectEmptyPipe,
     DetalleComponent,
     LoginComponent,
-    DetalleFacturaComponent
+    DetalleFacturaComponent,
+    FacturasComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
     MatDatepickerModule,
+    MatAutocompleteModule,
     MatInputModule,
     MatNativeDateModule,
     RouterModule.forRoot(routes),

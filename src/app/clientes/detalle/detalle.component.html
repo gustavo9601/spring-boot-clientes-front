@@ -58,7 +58,7 @@
                 <tr *ngFor="let factura of cliente.facturas">
                   <td>{{factura.id}}</td>
                   <td>{{factura.descripcion}}</td>
-                  <td>{{factura.auditoria.createdAt}}</td>
+                  <td>{{factura?.auditoria?.createdAt}}</td>
                   <td>{{factura.total | number}}</td>
                   <td>
                     <button class="btn btn-primary btn-sm" type="button"
